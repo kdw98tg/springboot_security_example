@@ -1,4 +1,4 @@
-package com.example.bst.oauth2_sequrity_example;
+package com.example.bst.test.java.com.example.bst.oauth2_sequrity_example;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
