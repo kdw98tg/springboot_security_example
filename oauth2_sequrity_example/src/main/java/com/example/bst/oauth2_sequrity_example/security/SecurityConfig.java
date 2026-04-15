@@ -6,12 +6,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.bst.oauth2_sequrity_example.oauth2.service.PrincipalOauth2UserService;
 import com.example.bst.oauth2_sequrity_example.user.data.UserRole;
+
+import lombok.RequiredArgsConstructor;
 
 // 시큐리티에서 일단 bean 으로 설정을 올리면
 // 기본설정은 무시되고 내가 설정한 설정들이 올라감
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final PrincipalOauth2UserService principalOauth2UserService;
+
 
     // 해당 메서드의 리턴되는 오브젝트를 IoC 로 등록해줌
     @Bean
@@ -36,8 +43,11 @@ public class SecurityConfig {
                         .loginPage("/login")// 로그인이 필요하면 /login 경로의 페이지를 보여주고
                         .loginProcessingUrl("/loginProc")// 로그인을 처리하는 라우팅은 다음과 같고
                         .defaultSuccessUrl("/")// 끝나면 / 로 가라
-                        .permitAll());
+                        .permitAll())
 
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo.userService(principalOauth2UserService)));
         return _http.build();
     }
 }
